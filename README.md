@@ -80,7 +80,7 @@ npm run data:import
 ```
 
 ```
-Sample User Logins
+# Sample User Logins
 
 Email: admin@example.com (Admin)
 
