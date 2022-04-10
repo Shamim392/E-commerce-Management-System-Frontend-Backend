@@ -18,10 +18,6 @@
 - PayPal / credit card integration
 - Database seeder (products & users)
 
-## Note on Issues
-
-Please do not post issues here that are related to your own code when taking the course. Add those in the Udemy Q/A. If you clone THIS repo and there are issues, then you can submit
-
 ## Usage
 
 ### ES Modules in Node
@@ -40,7 +36,7 @@ Create a .env file in then root and add the following
 NODE_ENV = development
 PORT = 5000
 MONGO_URI = your mongodb uri
-JWT_SECRET = 'abc123'
+JWT_SECRET = 'ABC123'
 PAYPAL_CLIENT_ID = your paypal client id
 ```
 
@@ -80,13 +76,12 @@ You can use the following commands to seed the database with some sample users a
 # Import data
 npm run data:import
 
-# Destroy data
-npm run data:destroy
-```
 
 ```
+
 Sample User Logins
 
 admin@example.com (Admin)
 123456
-```
+
+18203071@iubat.edu(User)
