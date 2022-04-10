@@ -79,10 +79,16 @@ npm run data:import
 
 ```
 
+```
 Sample User Logins
 
 Email: admin@example.com (Admin)
+```
+
 password: 123456
 
 Email: 18203071@iubat.edu(User)
+
+```
 password: 1234567
+```
