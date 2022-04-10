@@ -81,7 +81,8 @@ npm run data:import
 
 Sample User Logins
 
-admin@example.com (Admin)
-123456
+Email: admin@example.com (Admin)
+password: 123456
 
-18203071@iubat.edu(User)
+Email: 18203071@iubat.edu(User)
+password: 1234567
