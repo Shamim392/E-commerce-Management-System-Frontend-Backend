@@ -44,6 +44,25 @@ const OrderScreen = ({ match, history }) => {
     order.itemsPrice = addDecimals(
       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
     );
+    order.shippingPrice = addDecimals(order.itemsPrice > 100 ? 0 : 100);
+
+    // 15% tax for product
+    order.taxPrice = addDecimals(Number((0.15 * order.itemsPrice).toFixed(2)));
+
+    // discount price 10%
+    order.discountPrice = addDecimals(
+      Number((0.1 * order.itemsPrice).toFixed(2))
+    );
+
+    //total price
+    order.totalPrice = (
+      Number(order.itemsPrice) +
+      Number(order.shippingPrice) +
+      Number(order.taxPrice) +
+      Number(order.discountPrice)
+    ).toFixed(2);
+    // console.log(order.discountPrice);
+    // console.log(order.taxPrice);
   }
 
   useEffect(() => {
@@ -92,7 +111,7 @@ const OrderScreen = ({ match, history }) => {
   ) : (
     <>
       <h1>Order {order._id}</h1>
-      <Row>
+      <Row className="pb-5">
         <Col md={8}>
           <ListGroup variant="flush">
             <ListGroup.Item>

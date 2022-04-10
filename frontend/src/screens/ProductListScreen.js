@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import "../assets/css/ProductListScreen.css";
 import { LinkContainer } from "react-router-bootstrap";
 import { Table, Button, Row, Col } from "react-bootstrap";
@@ -12,6 +12,7 @@ import {
   createProduct,
 } from "../actions/productActions";
 import { PRODUCT_CREATE_RESET } from "../constants/productConstants";
+import ReactToPrint from "react-to-print";
 
 const ProductListScreen = ({ history, match }) => {
   const pageNumber = match.params.pageNumber || 1;
@@ -38,6 +39,9 @@ const ProductListScreen = ({ history, match }) => {
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  // for Print and pdf
+  const componentRef = useRef();
 
   useEffect(() => {
     dispatch({ type: PRODUCT_CREATE_RESET });
@@ -77,9 +81,6 @@ const ProductListScreen = ({ history, match }) => {
         <Col>
           <h1>Products</h1>
         </Col>
-        {/* <Col className="print">
-          <i class="fas fa-print"></i>
-        </Col> */}
         <Col className="text-right">
           <Button className="my-3" onClick={createProductHandler}>
             <i className="fas fa-plus"></i> Create Product
@@ -87,9 +88,17 @@ const ProductListScreen = ({ history, match }) => {
           <br />
         </Col>
       </Row>
-      {/* <div className="print">
-        <i class="fas fa-print"></i>
-      </div> */}
+
+      <ReactToPrint
+        trigger={() => (
+          <div className="print">
+            {" "}
+            <i className="fas fa-print"></i>
+          </div>
+        )}
+        content={() => componentRef.current}
+      />
+
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant="danger">{errorDelete}</Message>}
       {loadingCreate && <Loader />}
@@ -142,6 +151,40 @@ const ProductListScreen = ({ history, match }) => {
           </>
         </div>
       )}
+      <div style={{ display: "none" }}>
+        <>
+          <Table
+            ref={componentRef}
+            striped
+            bordered
+            hover
+            responsive
+            className="table-sm"
+          >
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>PRICE</th>
+                <th>CATEGORY</th>
+                <th>BRAND</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((product) => (
+                <tr key={product._id}>
+                  <td>{product._id}</td>
+                  <td>{product.name}</td>
+                  <td>${product.price}</td>
+                  <td>{product.category}</td>
+                  <td>{product.brand}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Paginate pages={pages} page={page} isAdmin={true} />
+        </>
+      </div>
     </>
   );
 };

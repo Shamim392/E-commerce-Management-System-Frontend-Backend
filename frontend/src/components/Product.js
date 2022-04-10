@@ -25,9 +25,13 @@ const Product = ({ product }) => {
         </Card.Text>
 
         <Card.Text as="h3">${product.price}</Card.Text>
+
         <div className="offer">
           <span class="">10% off</span>
         </div>
+        {/* <div className="offer">
+          <span class="">${product.discoutPrice}</span>
+        </div> */}
       </Card.Body>
     </Card>
   );
