@@ -101,6 +101,26 @@ const CartScreen = ({ match, location, history }) => {
               {cartItems
                 .reduce((acc, item) => acc + item.qty * item.price, 0)
                 .toFixed(2)}
+              {/* let normal_price =
+              {cartItems
+                .reduce((acc, item) => acc + item.qty * item.price, 0)
+                .toFixed(2)}
+              let discount ={" "}
+              {cartItems
+                .reduce((acc, item) => acc + item.qty * item.price * 0.1, 0)
+                .toFixed(2)} */}
+              <p className="">
+                Discount Price:{" "}
+                {cartItems
+                  .reduce(
+                    (acc, item) =>
+                      acc +
+                      item.qty * item.price -
+                      (acc + item.qty * item.price * 0.1),
+                    0
+                  )
+                  .toFixed(2)}
+              </p>
             </ListGroup.Item>
             <ListGroup.Item>
               <Button

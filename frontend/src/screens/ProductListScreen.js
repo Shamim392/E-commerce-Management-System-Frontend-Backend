@@ -152,6 +152,7 @@ const ProductListScreen = ({ history, match }) => {
         </div>
       )}
       <div style={{ display: "none" }}>
+        {/* <h2>All Products List</h2> */}
         <>
           <Table
             ref={componentRef}
