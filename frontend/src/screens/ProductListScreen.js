@@ -152,7 +152,6 @@ const ProductListScreen = ({ history, match }) => {
         </div>
       )}
       <div style={{ display: "none" }}>
-        {/* <h2>All Products List</h2> */}
         <>
           <Table
             ref={componentRef}
@@ -163,6 +162,18 @@ const ProductListScreen = ({ history, match }) => {
             className="table-sm"
           >
             <thead>
+              <tr>
+                <th colSpan={8} className="text-center text-primary fw-bold">
+                  <h2 className="text-danger">
+                    {" "}
+                    EKHONESHOP MANAGEMENT SYSTEM{" "}
+                  </h2>{" "}
+                  <br />
+                  <h5 className="text-info">
+                    Date: {new Date().toDateString()}
+                  </h5>
+                </th>
+              </tr>
               <tr>
                 <th>ID</th>
                 <th>NAME</th>

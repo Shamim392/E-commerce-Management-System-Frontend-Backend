@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Table, Form, Button, Row, Col } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import { getUserDetails, updateUserProfile } from "../actions/userActions";
 import { listMyOrders } from "../actions/orderActions";
 import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstants";
 import "../assets/css/ProfileScreen.css";
+import ReactToPrint from "react-to-print";
 
 const ProfileScreen = ({ location, history }) => {
   const [name, setName] = useState("");
@@ -17,6 +18,9 @@ const ProfileScreen = ({ location, history }) => {
   const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
+
+  //for printing invoice
+  const invoiceRef = useRef();
 
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
@@ -29,6 +33,9 @@ const ProfileScreen = ({ location, history }) => {
 
   const orderListMy = useSelector((state) => state.orderListMy);
   const { loading: loadingOrders, error: errorOrders, orders } = orderListMy;
+
+  // for Print and pdf
+  // const componentRef = useRef();
 
   useEffect(() => {
     if (!userInfo) {
@@ -119,6 +126,15 @@ const ProfileScreen = ({ location, history }) => {
       </Col>
       <Col md={9}>
         <h2>My Orders</h2>
+        {/* <ReactToPrint
+          trigger={() => (
+            <div className="print">
+              {" "}
+              <i className="fas fa-print"></i>
+            </div>
+          )}
+          content={() => componentRef.current}
+        /> */}
         {loadingOrders ? (
           <Loader />
         ) : errorOrders ? (
@@ -132,7 +148,8 @@ const ProfileScreen = ({ location, history }) => {
                 <th>TOTAL</th>
                 <th>PAID</th>
                 <th>DELIVERED</th>
-                <th></th>
+                <th>Details</th>
+                <th>Invoice</th>
               </tr>
             </thead>
             <tbody>
@@ -145,14 +162,15 @@ const ProfileScreen = ({ location, history }) => {
                     {order.isPaid ? (
                       order.paidAt.substring(0, 10)
                     ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
+                      <span className="text-danger">Not paid</span>
                     )}
                   </td>
+
                   <td>
                     {order.isDelivered ? (
                       order.deliveredAt.substring(0, 10)
                     ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
+                      <span className="text-danger">Not Delivered</span>
                     )}
                   </td>
                   <td>
@@ -161,6 +179,128 @@ const ProfileScreen = ({ location, history }) => {
                         Details
                       </Button>
                     </LinkContainer>
+                  </td>
+                  <td>
+                    {order?.isPaid ? (
+                      <ReactToPrint
+                        trigger={() => (
+                          <button className="btn btn-success mb-1">
+                            {" "}
+                            <i className="fas fa-print"></i>
+                            <small className="invoice">Invoice</small>
+                          </button>
+                        )}
+                        content={() => invoiceRef.current}
+                      />
+                    ) : (
+                      // <i className="fas fa-times" style={{ color: "red" }}></i>
+                      <span className="text-danger">Not paid</span>
+                    )}
+                    {/* the invisible table  */}
+                    <div style={{ display: "none" }}>
+                      <Table ref={invoiceRef} responsive>
+                        <thead className="bg-light">
+                          <tr>
+                            <th colSpan={4} className="text-center fw-bold">
+                              <h2 className="text-info">
+                                {" "}
+                                EKHONESHOP MANAGEMENT SYSTEM{" "}
+                              </h2>{" "}
+                              <br />
+                              <h5 className="text-dark">
+                                Invoice Date: {new Date().toDateString()}
+                              </h5>
+                            </th>
+                          </tr>
+                          {/* <tr>
+                            <th
+                              colSpan={4}
+                              className="d-flex justify-content-center"
+                            >
+                              <h4 className="text-dark fw-bold">
+                                Delivery For :{" "}
+                                <span className="text-warning">
+                                  {order.user && order.user.name}
+                                  {order.name}
+                                </span>
+                              </h4>
+                            </th>
+                          </tr> */}
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td
+                              colSpan={4}
+                              className="d-flex justify-content-end me-2"
+                            >
+                              <h4 className="fw-bold">Delivery to: Shamim</h4>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              colSpan={4}
+                              className="d-flex justify-content-end me-2"
+                            >
+                              <h4 className="fw-bold">Order Id: {order._id}</h4>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              colSpan={4}
+                              className="d-flex justify-content-end me-2"
+                            >
+                              <h4 className="fw-bold">
+                                Order Date: {order.createdAt.substring(0, 10)}
+                              </h4>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              colSpan={4}
+                              className="d-flex justify-content-end me-2"
+                            >
+                              <h4 className="fw-bold">
+                                Tax Price: {order.taxPrice} Taka
+                              </h4>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              colSpan={4}
+                              className="d-flex justify-content-end me-2"
+                            >
+                              <h4 className="fw-bold">
+                                Discount Price: {order.discountPrice} Taka
+                              </h4>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              colSpan={4}
+                              className="d-flex justify-content-end me-2"
+                            >
+                              <h4 className="fw-bold">
+                                Total Cost: {order.totalPrice} Taka
+                              </h4>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              colSpan={4}
+                              className="d-flex justify-content-end me-2"
+                            >
+                              <h3 className="fw-bold text-info">
+                                Payment Method: Paypal
+                                {/* #demo card Number
+                                4242424242424242 
+                                4000056655665556
+                                5555555555554444 */}
+                              </h3>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </div>
                   </td>
                 </tr>
               ))}
